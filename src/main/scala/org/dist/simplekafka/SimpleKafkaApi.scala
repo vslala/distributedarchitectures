@@ -9,7 +9,7 @@ import org.dist.queue.utils.ZkUtils.Broker
 import scala.jdk.CollectionConverters._
 
 
-class SimpleKafkaApi(config: Config, replicaManager: ReplicaManager) {
+case class SimpleKafkaApi(config: Config, replicaManager: ReplicaManager) {
   var aliveBrokers = List[Broker]()
   var leaderCache = new java.util.HashMap[TopicAndPartition, PartitionInfo]
 

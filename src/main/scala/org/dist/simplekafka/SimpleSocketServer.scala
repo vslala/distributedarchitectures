@@ -26,7 +26,7 @@ import org.dist.queue.common.Logging
 import org.dist.queue.utils.Utils
 import org.dist.util.SocketIO
 
-class SimpleSocketServer(val brokerId: Int,
+case class SimpleSocketServer(val brokerId: Int,
                          val host: String,
                          val port: Int,
                          val kafkaApis: SimpleKafkaApi) extends Logging {

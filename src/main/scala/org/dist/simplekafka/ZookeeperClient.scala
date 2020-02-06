@@ -10,6 +10,7 @@ import org.dist.queue.common.Logging
 import org.dist.queue.server.Config
 import org.dist.queue.utils.ZkUtils.Broker
 import org.dist.queue.utils.{ZKStringSerializer, ZkUtils}
+import org.dist.simplekafka.mysimplekafka.MyBrokerController
 
 import scala.jdk.CollectionConverters._
 
@@ -38,8 +39,10 @@ trait ZookeeperClient {
   def subscribeBrokerChangeListener(listener: IZkChildListener): Option[List[String]]
 
   def subscribeControllerChangeListner(controller: Controller): Unit
-
+  
   def registerSelf()
+
+  def registerSelf(controller: MyBrokerController)
 
   def tryCreatingControllerPath(data: String)
 }
@@ -86,6 +89,11 @@ private[simplekafka] class ZookeeperClientImpl(config: Config) extends Zookeeper
 
   override def registerSelf(): Unit = {
     val broker = Broker(config.brokerId, config.hostName, config.port)
+    registerBroker(broker)
+  }
+  
+  override def registerSelf(controller: MyBrokerController): Unit = {
+    val broker = Broker(controller.brokerId, config.hostName, config.port)
     registerBroker(broker)
   }
 

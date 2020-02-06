@@ -2,6 +2,7 @@ package org.dist.simplekafka
 
 import org.I0Itec.zkclient.{IZkChildListener, IZkDataListener, ZkClient}
 import org.dist.queue.utils.ZkUtils.Broker
+import org.dist.simplekafka.mysimplekafka.MyBrokerController
 import org.scalatest.FunSuite
 
 class TestZookeeperClient(brokerIds:List[Int]) extends ZookeeperClient {
@@ -42,6 +43,8 @@ class TestZookeeperClient(brokerIds:List[Int]) extends ZookeeperClient {
   override def getPartitionReplicaLeaderInfo(topicName : String): List[LeaderAndReplicas] = ???
 
   override def getTopics(): List[String] = ???
+
+  override def registerSelf(controller: MyBrokerController): Unit = ???
 }
 
 class CreateTopicCommandTest extends FunSuite {

@@ -7,8 +7,6 @@ import org.dist.util.Networks
 
 class MyBrokerChangeListenerTest extends ZookeeperTestHarness {
 
-  val listener = MyBrokerChangeListener()
-
   test("it should subscribe to the registered broker and invoke a callback method") {
     val config1 = Config(1, new Networks().hostname(), TestUtils.choosePort(), zkConnect, List(TestUtils.tempDir().getAbsolutePath))
     val broker1 = Broker(config1.brokerId, config1.hostName, config1.port)
@@ -17,6 +15,7 @@ class MyBrokerChangeListenerTest extends ZookeeperTestHarness {
     val broker2 = Broker(config2.brokerId, config2.hostName, config2.port)
 
     val zookeeperClient: MyZookeeperClient = MyZookeeperClient(config1)
+    val listener = MyBrokerChangeListener(zookeeperClient)
     zookeeperClient.subscribeBrokerChangeListener(listener)
     zookeeperClient.registerBroker(broker1)
     zookeeperClient.registerBroker(broker2)
