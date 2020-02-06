@@ -1,7 +1,7 @@
 package org.dist.simplekafka.mysimplekafka
 
 import com.google.common.annotations.VisibleForTesting
-import org.I0Itec.zkclient.ZkClient
+import org.I0Itec.zkclient.{IZkChildListener, ZkClient}
 import org.I0Itec.zkclient.exception.ZkNoNodeException
 import org.dist.kvstore.JsonSerDes
 import org.dist.queue.server.Config
@@ -11,6 +11,8 @@ import org.dist.queue.utils.ZkUtils.Broker
 import scala.jdk.CollectionConverters._
 
 case class MyZookeeperClient(config: Config) {
+  var liveBrokers: List[String] = List[String]()
+  
   val BrokerTopicsPath = "/brokers/topics"
   val BrokerIdsPath = "/brokers/ids"
   val ControllerPath = "/controller"
@@ -53,4 +55,11 @@ case class MyZookeeperClient(config: Config) {
       JsonSerDes.deserialize(data.getBytes, classOf[Broker])
     }).toSet
   }
+  
+  def subscribeBrokerChangeListener(listener: IZkChildListener): Option[List[String]] = {
+    val result = zkClient.subscribeChildChanges(BrokerIdsPath, listener)
+    Option(result).map(_.asScala.toList)
+  }
+
+
 }
