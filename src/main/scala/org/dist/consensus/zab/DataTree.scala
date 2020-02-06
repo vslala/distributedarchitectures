@@ -9,7 +9,7 @@ class DataTree {
   def processTransaction(txnHeader: TxnHeader, txn: SetDataTxn) = {
     val opsCode = txnHeader.opsCode
     opsCode match {
-      case OpsCode.setData ⇒ {
+      case OpsCode.setData => {
         nodes.put(txn.path, txn.data)
       }
     }
