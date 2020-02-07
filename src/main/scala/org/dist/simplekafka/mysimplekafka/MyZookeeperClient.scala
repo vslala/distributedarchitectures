@@ -2,13 +2,13 @@ package org.dist.simplekafka.mysimplekafka
 
 import com.fasterxml.jackson.core.`type`.TypeReference
 import com.google.common.annotations.VisibleForTesting
-import org.I0Itec.zkclient.{IZkChildListener, ZkClient}
 import org.I0Itec.zkclient.exception.{ZkNoNodeException, ZkNodeExistsException}
+import org.I0Itec.zkclient.{IZkChildListener, ZkClient}
 import org.dist.kvstore.JsonSerDes
 import org.dist.queue.server.Config
-import org.dist.queue.utils.ZKStringSerializer
 import org.dist.queue.utils.ZkUtils.Broker
-import org.dist.simplekafka.{Controller, ControllerExistsException, LeaderAndReplicas, PartitionReplicas, ZookeeperClient}
+import org.dist.queue.utils.{ZKStringSerializer, ZkUtils}
+import org.dist.simplekafka._
 
 import scala.jdk.CollectionConverters._
 
@@ -86,9 +86,24 @@ case class MyZookeeperClient(config: Config) extends ZookeeperClient {
     createPersistentPath(zkClient, topicsPath, topicsData)
   }
 
-  override def setPartitionLeaderForTopic(topicName: String, leaderAndReplicas: List[LeaderAndReplicas]): Unit = ???
+  override def setPartitionLeaderForTopic(topicName: String, leaderAndReplicas: List[LeaderAndReplicas]): Unit = {
+    val leaderReplicaSerializer = JsonSerDes.serialize(leaderAndReplicas)
+    val path = getReplicaLeaderElectionPath(topicName);
 
-  override def getAllBrokerIds(): Set[Int] = liveBrokers.toSet
+    try {
+      ZkUtils.updatePersistentPath(zkClient,path, leaderReplicaSerializer)
+    } catch {
+      case e: Throwable => {
+        println("Exception while writing data to partition leader data" + e)
+      }
+    }
+  }
+  
+  def getReplicaLeaderElectionPath(topicName: String) = {
+    ReplicaLeaderElectionPath + "/" + topicName
+  }
+
+  override def getAllBrokerIds(): Set[Int] = zkClient.getChildren(BrokerIdsPath).asScala.map(_.toInt).toSet
 
   override def getPartitionReplicaLeaderInfo(topicName: String): List[LeaderAndReplicas] = ???
 

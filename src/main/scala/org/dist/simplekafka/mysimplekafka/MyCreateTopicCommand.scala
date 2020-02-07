@@ -35,7 +35,7 @@ case class MyCreateTopicCommand(zookeeperClient: ZookeeperClient) {
   }
   
 
-  def createTopic(topicName: "topic1", noOfPartitions: Int, replicationFactor: Int) = {
+  def createTopic(topicName: String, noOfPartitions: Int, replicationFactor: Int) = {
     val brokerIds = zookeeperClient.getAllBrokerIds()
     
     val partitionReplicas: Set[PartitionReplicas] = assignReplicasToBrokers(brokerIds.toList, noOfPartitions, replicationFactor)

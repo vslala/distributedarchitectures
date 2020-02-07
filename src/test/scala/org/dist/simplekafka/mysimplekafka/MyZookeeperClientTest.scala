@@ -15,6 +15,7 @@ class MyZookeeperClientTest extends ZookeeperTestHarness {
     
     assert(zookeeperClient !== null)
     assert(zookeeperClient.getAllBrokers().contains(broker))
+    assert(zookeeperClient.getAllBrokerIds().contains(1))
   }
   
   

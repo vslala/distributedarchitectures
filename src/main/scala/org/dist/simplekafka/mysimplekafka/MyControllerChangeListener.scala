@@ -1,8 +1,6 @@
 package org.dist.simplekafka.mysimplekafka
 
-import java.util
-
-import org.I0Itec.zkclient.{IZkChildListener, IZkDataListener, ZkClient}
+import org.I0Itec.zkclient.{IZkDataListener, ZkClient}
 
 case class MyControllerChangeListener(controller: MyBrokerController, zkClient: ZkClient) extends IZkDataListener {
   override def handleDataChange(dataPath: String, data: Any): Unit = {

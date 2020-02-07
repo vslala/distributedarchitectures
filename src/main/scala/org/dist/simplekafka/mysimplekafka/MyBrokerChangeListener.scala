@@ -3,7 +3,6 @@ package org.dist.simplekafka.mysimplekafka
 import java.util
 
 import org.I0Itec.zkclient.IZkChildListener
-import org.dist.queue.utils.ZkUtils.Broker
 
 case class MyBrokerChangeListener(zookeeperClient: MyZookeeperClient) extends IZkChildListener {
   import scala.jdk.CollectionConverters._

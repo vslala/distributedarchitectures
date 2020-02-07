@@ -4,6 +4,7 @@ import java.util
 
 import org.I0Itec.zkclient.IZkChildListener
 import org.dist.simplekafka.PartitionReplicas
+
 import scala.jdk.CollectionConverters._
 
 class MyTopicChangeHandler(zookeeperClient: MyZookeeperClient, onTopicChange: (String, Seq[PartitionReplicas]) => Unit) extends IZkChildListener {
